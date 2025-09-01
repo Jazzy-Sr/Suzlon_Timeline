@@ -8,6 +8,10 @@
     --text-color: #495057;
 }
 
+html {
+    scroll-behavior: smooth; /* Enables smooth scrolling for anchor links */
+}
+
 body {
     font-family: 'Roboto', sans-serif;
     color: var(--text-color);
@@ -20,8 +24,13 @@ body {
     background-attachment: fixed;
 }
 
-/* --- UPDATED HEADER STYLES --- */
+/* --- Sticky Header Styles --- */
 header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    width: 100%;
+
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -29,6 +38,8 @@ header {
     margin: 0 auto;
     padding: 20px;
     background-color: var(--background-light);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    box-sizing: border-box;
 }
 
 .header-title {
@@ -47,10 +58,9 @@ header p {
 }
 
 .header-logo {
-    height: 60px; /* Adjust height as needed */
+    height: 60px;
     width: auto;
 }
-
 
 /* --- Main Timeline Container --- */
 .timeline-container {
@@ -63,6 +73,7 @@ header p {
     position: relative;
     display: flex;
     width: 100%;
+    scroll-margin-top: 200px; /* Offset for sticky headers when jumping to anchor */
 }
 
 .timeline-group-wrapper.group-reversed {
@@ -73,7 +84,7 @@ header p {
 .sticky-background {
     width: 50%;
     position: sticky;
-    top: 20px;
+    top: 180px; /* Adjusted for both sticky headers */
     margin: 10px;
     align-self: flex-start;
 }
@@ -255,20 +266,72 @@ header p {
     color: var(--text-color);
 }
 
+
+/* --- UPDATED: Timeline Navigation Bar --- */
+.timeline-nav {
+    position: sticky;
+    top: 102px; /* Sticks below the header */
+    z-index: 99;
+    
+    /* Alignment styles */
+    max-width: 1200px;
+    margin: 0 auto; /* Centers the nav bar */
+    padding: 0 20px; /* Provides spacing on the sides */
+    box-sizing: border-box; /* Ensures padding is included in the width */
+
+    display: flex;
+    justify-content: center; /* Centers the links within the bar */
+    align-items: center;
+    background-color: #fff;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    
+    overflow-x: auto; /* Allows horizontal scrolling on small screens */
+    white-space: nowrap; /* Prevents links from wrapping to a new line */
+}
+
+.timeline-nav a {
+    padding: 15px 10px;
+    text-decoration: none;
+    color: var(--suzlon-blue);
+    font-size: clamp(0.75rem, 2.5vw, 0.9rem); /* Responsive font size */
+    font-weight: bold;
+    border-bottom: 3px solid transparent;
+    transition: all 0.2s ease-in-out;
+}
+
+.timeline-nav a:not(:last-child)::after {
+    content: '>>';
+    margin-left: 10px;
+    color: #ccc;
+}
+
+.timeline-nav a.active {
+    color: var(--suzlon-green);
+    border-bottom: 3px solid var(--suzlon-green);
+}
+
+
 /* --- Responsive Design for Mobile --- */
 @media screen and (max-width: 992px) {
     header {
         flex-direction: column;
         gap: 15px;
+        padding: 15px;
     }
 
     .header-title {
         text-align: center;
     }
+    
+    .timeline-nav {
+        top: 145px; /* Adjust sticky top for taller mobile header */
+        justify-content: flex-start; /* Ensure scrolling starts from the left on mobile */
+        padding: 0 10px;
+    }
 
-    .timeline-group-wrapper,
-    .timeline-group-wrapper.group-reversed {
+    .timeline-group-wrapper {
         flex-direction: column;
+        scroll-margin-top: 250px; /* Taller offset for mobile */
     }
 
     .sticky-background {

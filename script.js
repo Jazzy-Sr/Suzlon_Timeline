@@ -1,4 +1,4 @@
-// This is the final, complete list of all 73 milestone events.
+// This is your full list of milestone events.
 const timelineData = [
     { year: "1995", title: "Formation of Suzlon Energy Limited", description: "Formation of Suzlon Energy Limited", imageId: 1 },
     { year: "1996", title: "First WTG Commissioned", description: "Suzlon commissions its first 0.27 MW Wind Turbine for M/s Indian Petro Chemicals Limited at Site : Dhank ( Gujarat).", imageId: 2 },
@@ -78,7 +78,9 @@ const timelineData = [
 // This function builds the timeline from the data above
 function buildTimeline() {
     const mainContainer = document.getElementById('timeline-container');
+    const navContainer = document.getElementById('timeline-nav');
     mainContainer.innerHTML = '';
+    navContainer.innerHTML = '';
 
     const groupedBy5Year = timelineData.reduce((acc, event) => {
         const groupStartYear = Math.floor(parseInt(event.year.substring(0, 4)) / 5) * 5;
@@ -95,9 +97,16 @@ function buildTimeline() {
         const eventsIn5YearBlock = groupedBy5Year[groupYear];
         const groupStartYear = parseInt(groupYear);
         const groupEndYear = groupStartYear + 4;
+        const groupId = `group-${groupStartYear}`;
+
+        const navLink = document.createElement('a');
+        navLink.href = `#${groupId}`;
+        navLink.textContent = `${groupStartYear}-${groupEndYear}`;
+        navContainer.appendChild(navLink);
 
         const groupWrapper = document.createElement('div');
         groupWrapper.className = 'timeline-group-wrapper';
+        groupWrapper.id = groupId;
         if (bgCounter % 2 === 0) {
             groupWrapper.classList.add('group-reversed');
         }
@@ -148,6 +157,7 @@ function buildTimeline() {
         mainContainer.appendChild(groupWrapper);
     }
     initializeCarousels();
+    initializeScrollSpy();
 }
 
 function createTimelineCardHTML(event) {
@@ -215,4 +225,37 @@ function initializeCarousels() {
     });
 }
 
-buildTimeline();
+function initializeScrollSpy() {
+    const navLinks = document.querySelectorAll('.timeline-nav a');
+    const sections = document.querySelectorAll('.timeline-group-wrapper');
+
+    const observerOptions = {
+      root: null,
+      rootMargin: '-50% 0px -50% 0px',
+      threshold: 0
+    };
+
+    const observer = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const id = entry.target.getAttribute('id');
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href') === `#${id}`) {
+                        link.classList.add('active');
+                    }
+                });
+            }
+        });
+    }, observerOptions);
+
+    sections.forEach(section => {
+        observer.observe(section);
+    });
+}
+
+// --- UPDATED CODE ---
+// This ensures the script waits for the HTML to be fully loaded before running.
+document.addEventListener('DOMContentLoaded', function() {
+    buildTimeline();
+});

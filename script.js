@@ -1,4 +1,4 @@
-// This is your full list of milestone events.
+// This is the final, complete list of all 73 milestone events.
 const timelineData = [
     { year: "1995", title: "Formation of Suzlon Energy Limited", description: "Formation of Suzlon Energy Limited", imageId: 1 },
     { year: "1996", title: "First WTG Commissioned", description: "Suzlon commissions its first 0.27 MW Wind Turbine for M/s Indian Petro Chemicals Limited at Site : Dhank ( Gujarat).", imageId: 2 },
@@ -90,8 +90,7 @@ function buildTimeline() {
     }, {});
 
     let bgCounter = 1;
-    let totalEventsRendered = 0;
-
+    
     for (const groupYear in groupedBy5Year) {
         const eventsIn5YearBlock = groupedBy5Year[groupYear];
         const groupStartYear = parseInt(groupYear);
@@ -130,20 +129,16 @@ function buildTimeline() {
         for (const year in eventsGroupedByYear) {
             const events = eventsGroupedByYear[year];
             if (events.length > 2) {
-                // Render as a carousel for this year
                 const carouselItem = document.createElement('div');
                 carouselItem.className = 'timeline-item';
                 carouselItem.innerHTML = createCarouselHTML(events, year);
                 contentContainer.appendChild(carouselItem);
-                totalEventsRendered++;
             } else {
-                // Render as individual items
                 events.forEach(event => {
                     const timelineItem = document.createElement('div');
                     timelineItem.className = 'timeline-item';
                     timelineItem.innerHTML = createTimelineCardHTML(event);
                     contentContainer.appendChild(timelineItem);
-                    totalEventsRendered++;
                 });
             }
         }
@@ -152,7 +147,6 @@ function buildTimeline() {
         groupWrapper.appendChild(contentContainer);
         mainContainer.appendChild(groupWrapper);
     }
-    // Add event listeners after all carousels are added to the DOM
     initializeCarousels();
 }
 
